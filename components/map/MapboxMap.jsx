@@ -86,22 +86,30 @@ const MapboxMap = ({ userLocation, golfPlaces, onSelectedLocation }) => {
           placeLatitude >= mapBorder.getSouth() &&
           placeLatitude <= mapBorder.getNorth() &&
           placeLongiitude >= mapBorder.getWest() &&
-          placeLongiitude <= mapBorder.getSast()
+          placeLongiitude <= mapBorder.getEast()
         ) {
           const marker = new mapboxgl.Marker()
             .setLngLat([placeLongiitude, placeLatitude])
             .addTo(mapInstanceRef.current);
 
-          let hoverTimeout;
-          let isFirstHover = true;
-
+          // マウスホバー時に、簡単な情報Sを表示
+          let hoverTimeout
+          let firstHover = true // ホバー履歴を見る
           const showPopup = () => {
-            const popup = new mapboxgl.Popup({offset: []}, )
+            const popup = new mapboxgl.Popup({ closeOnClick: false })
+              .setLngLat([placeLongitude, placeLatitude])
+              .setHTML(`<h3>${place.name}</h3><p>クリックして詳細を見る</p>`)
+              .addTo(mapInstanceRef.current);
+            popupRef.current = popup;
           }
-        
+
+          marker.getElement().addEventListener('mouseenter', () => {
+            
+          })
+          // クリック時にパーンネルに情報を渡す
           marker.getElement().addEventListener('click', () => {
             if (popupRef.current) {
-              popupRef.current.r5ㅂemove();
+              popupRef.current.remove();
             }
 
             // 使用者と店舗までの距離計算
